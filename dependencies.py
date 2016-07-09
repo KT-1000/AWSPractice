@@ -8,14 +8,12 @@
 # dependencies. Make sure there are no duplicates in the output.
 
 
-def get_dependencies(node_list):
-    graph = {'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']}
-
-    dependencies = []
+def get_dependencies(node_list, graph):
+    dependencies = set()
     for item in node_list:
         for val in graph[item]:
-            dependencies.append(val)
+            dependencies.add(val)
 
-    print dependencies
+    return sorted(dependencies)
 
-print get_dependencies(['A', 'B', 'C'])
+print get_dependencies(['A', 'B', 'C', 'E', 'F'], {'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
