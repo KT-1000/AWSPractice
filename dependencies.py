@@ -9,6 +9,8 @@
 
 
 def add_depths(node, dependencies, graph):
+    for val in node:
+        dependencies[node].add(val)
 
 
 def get_dependencies(graph):
@@ -22,8 +24,7 @@ def get_dependencies(graph):
             dependencies[key].add(item)
             # the item is also a node, so go get the items in that node's value list if they exist
             if item in graph:
-                for val in graph[item]:
-                    dependencies[key].add(val)
+                add_depths(graph[item], dependencies, graph)
 
     return dependencies
 
