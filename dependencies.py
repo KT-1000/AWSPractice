@@ -8,12 +8,23 @@
 # dependencies. Make sure there are no duplicates in the output.
 
 
-def get_dependencies(node_list, graph):
-    dependencies = set()
-    for item in node_list:
-        for val in graph[item]:
-            dependencies.add(val)
+def add_depths(node, dependencies, graph):
 
-    return sorted(dependencies)
 
-print get_dependencies(['A', 'B', 'C', 'E', 'F'], {'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
+def get_dependencies(graph):
+    dependencies = {}
+
+    for key in graph:
+        dependencies[key] = set()
+
+        for item in graph[key]:
+            # add the dependencies to that node's set
+            dependencies[key].add(item)
+            # the item is also a node, so go get the items in that node's value list if they exist
+            if item in graph:
+                for val in graph[item]:
+                    dependencies[key].add(val)
+
+    return dependencies
+
+print get_dependencies({'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
