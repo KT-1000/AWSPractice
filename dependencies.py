@@ -13,8 +13,10 @@ def get_dependencies(node, dependencies, graph):
     if node not in graph:
         return
     for dependency in graph[node]:
-        # add new node to set
-        dependencies.add(dependency)
+        if dependency in dependencies:
+            dependencies.remove(dependency)
+        # add new node
+        dependencies.append(dependency)
         get_dependencies(dependency, dependencies, graph)
 
 
@@ -22,9 +24,46 @@ def build_dependencies(graph):
     dependency_graph = {}
 
     for key in graph:
-        dependency_graph[key] = set()
+        dependency_graph[key] = []
         get_dependencies(key, dependency_graph[key], graph)
 
     return dependency_graph
 
-print build_dependencies({'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
+
+def get_max_key(graph):
+    max_length = 0
+    max_key = ""
+
+    for key in graph:
+        key_len = len(graph[key])
+
+        if key_len > max_length:
+            max_length = key_len
+            max_key = key
+
+    return max_key
+
+
+def print_instruction(key):
+    "Operation " + key + " on part X"
+
+
+def print_instructions(key, graph):
+    max_deps = graph[key]
+
+    max_deps.reverse()
+
+    for dep in max_deps:
+        print print_instruction(dep)
+
+    print print_instruction(key)
+
+max_key = get_max_key(graph)
+print_instructions(max_key, graph)
+
+print build_dependencies({
+    'one': [],
+    'two': ['one'],
+    'final': ['two']
+})
+
