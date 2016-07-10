@@ -8,24 +8,23 @@
 # dependencies. Make sure there are no duplicates in the output.
 
 
-def add_depths(node, dependencies, graph):
-    for val in node:
-        dependencies[node].add(val)
+def get_dependencies(node, dependencies, graph):
+    # base case
+    if node not in graph:
+        return
+    for dependency in graph[node]:
+        # add new node to set
+        dependencies.add(dependency)
+        get_dependencies(dependency, dependencies, graph)
 
 
-def get_dependencies(graph):
-    dependencies = {}
+def build_dependencies(graph):
+    dependency_graph = {}
 
     for key in graph:
-        dependencies[key] = set()
+        dependency_graph[key] = set()
+        get_dependencies(key)
 
-        for item in graph[key]:
-            # add the dependencies to that node's set
-            dependencies[key].add(item)
-            # the item is also a node, so go get the items in that node's value list if they exist
-            if item in graph:
-                add_depths(graph[item], dependencies, graph)
+    return dependency_graph
 
-    return dependencies
-
-print get_dependencies({'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
+print build_dependencies({'A': ['B', 'C'], 'B': ['C', 'E'], 'C': ['G'], 'D': ['A', 'F'], 'E': ['F'], 'F': ['H']})
