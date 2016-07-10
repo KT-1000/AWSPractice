@@ -10,8 +10,8 @@
 
 def get_dependencies(node, dependencies, graph):
     # base case
-    if node not in graph:
-        return
+    # if node not in graph:
+    #     return
     for dependency in graph[node]:
         # add new node to set
         dependencies.add(dependency)
@@ -23,7 +23,7 @@ def build_dependencies(graph):
 
     for key in graph:
         dependency_graph[key] = set()
-        get_dependencies(key)
+        get_dependencies(key, dependency_graph[key], graph)
 
     return dependency_graph
 
